@@ -4,13 +4,15 @@ import person.Person;
 import sorter.api.Sorter;
 import sorter.impl.quick_sort.QuickSort;
 import sortingPerson.api.IdenticalPersonsException;
+import sortingPerson.api.PersonSorter;
 
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Реализация сортировки массива объектов Person по алгоритму быстрой сортировки.
  */
-public class SortingPersonsByQuickSort extends SortingPerson {
+public class SortingPersonsByQuickSort implements PersonSorter {
 
     /**
      * Сортировка массива объектов Person по алгоритму быстрой сортировки. Алгоритм quicksort
@@ -24,7 +26,7 @@ public class SortingPersonsByQuickSort extends SortingPerson {
      * @param persons - исходный массив.
      * @throws IdenticalPersonsException - идентичные объекты Person по всем полям.
      */
-    public void sort(Person[] persons) throws IdenticalPersonsException {
+    public void sort(List<Person> persons) throws IdenticalPersonsException {
 
         Comparator<Person> comparator = getComparatorSexThenNameThenAgeComparing();
 

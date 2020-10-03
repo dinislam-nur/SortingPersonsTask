@@ -1,16 +1,15 @@
 package sorter.impl.merge_sort;
 
-import sorter.impl.AbstractSorter;
+import sorter.api.Sorter;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 
 /**
  * Реализация интерфейса Sorter<T> сортировкой слияния.
  *
  * @param <T>
  */
-public class MergeSort<T> extends AbstractSorter<T> {
+public class MergeSort<T> implements Sorter<T> {
 
     /**
      * Компаратор для сравнения двух элементов массива. При инициализации присваивается
@@ -27,7 +26,7 @@ public class MergeSort<T> extends AbstractSorter<T> {
      *                            метода compareTo интерфеса Comparable<T>.
      */
     @Override
-    public void sort(T[] array) throws ClassCastException {
+    public void sort(List<T> array) throws ClassCastException {
         sortingProcedure(array);
         comparator = null;
     }
@@ -40,7 +39,7 @@ public class MergeSort<T> extends AbstractSorter<T> {
      * @param comparator - компаратор, в котором предоставлен метод
      */
     @Override
-    public void sort(T[] array, Comparator<T> comparator) {
+    public void sort(List<T> array, Comparator<T> comparator) {
         this.comparator = comparator;
         sort(array);
     }
@@ -54,8 +53,8 @@ public class MergeSort<T> extends AbstractSorter<T> {
      *
      * @param array - исходный массив для сортировки.
      */
-    private void sortingProcedure(T[] array) {
-        int size = array.length;
+    private void sortingProcedure(List<T> array) {
+        int size = array.size();
         int partitionSize = 1;
         int step = 2;
         int numberOfPartitions = size / 2;
@@ -67,11 +66,11 @@ public class MergeSort<T> extends AbstractSorter<T> {
                 int median = left + partitionSize;
                 int right = median + partitionSize - 1;
                 if (i == numberOfPartitions - 1 && remainder == 0) {
-                    right = array.length - 1;
+                    right = array.size() - 1;
                 }
                 merge(array, left, median, right);
                 if (i == numberOfPartitions - 1 && remainder == 1) {
-                    merge(array, left, right + 1, array.length - 1);
+                    merge(array, left, right + 1, array.size() - 1);
                 }
             }
             step *= 2;
@@ -91,21 +90,25 @@ public class MergeSort<T> extends AbstractSorter<T> {
      * @param median - левая граница сливаемой правой части массива.
      * @param right  - правая граница сливаемой правой части массива.
      */
-    private void merge(T[] array, int left, int median, int right) {
-        T[] leftArray = Arrays.copyOfRange(array, left, median);
+    private void merge(List<T> array, int left, int median, int right) {
+//        T[] leftArray = Arrays.copyOfRange(array, left, median);
+        List<T> leftArray = new ArrayList<>(array.subList(left, median));
         int leftCount = 0;
         int rightCount = median;
 
         for (int i = left; i < rightCount; i++) {
             if (rightCount <= right) {
-                final int compare = comparator.compare(leftArray[leftCount], array[rightCount]);
+                final int compare = comparator.compare(leftArray.get(leftCount), array.get(rightCount));
                 if (compare < 1) {
-                    array[i] = leftArray[leftCount++];
+//                    array[i] = leftArray[leftCount++];
+                    array.set(i, leftArray.get(leftCount++));
                 } else {
-                    array[i] = array[rightCount++];
+                    array.set(i, array.get(rightCount++));
+//                    array[i] = array[rightCount++];
                 }
             } else {
-                array[i] = leftArray[leftCount++];
+//                array[i] = leftArray[leftCount++];
+                array.set(i, leftArray.get(leftCount++));
             }
         }
     }

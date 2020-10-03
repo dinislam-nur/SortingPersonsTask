@@ -1,17 +1,18 @@
 package sorter.impl.quick_sort;
 
 import sorter.api.Sorter;
-import sorter.impl.AbstractSorter;
 
-import java.util.Comparator;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static java.util.Collections.*;
 
 /**
  * Реализация интерфейса Sorter<T> quicksort сортировкой.
  *
  * @param <T> - тип массива.
  */
-public class QuickSort<T> extends AbstractSorter<T> {
+public class QuickSort<T> implements Sorter<T> {
 
     /**
      * Компаратор для сравнения двух элементов массива. При инициализации присваивается
@@ -33,8 +34,8 @@ public class QuickSort<T> extends AbstractSorter<T> {
      *                            метода compareTo интерфеса Comparable<T>.
      */
     @Override
-    public void sort(T[] array) throws ClassCastException {
-        sortingProcedure(array, 0, array.length - 1);
+    public void sort(List<T> array) throws ClassCastException {
+        sortingProcedure(array, 0, array.size() - 1);
         comparator = null;
     }
 
@@ -47,7 +48,7 @@ public class QuickSort<T> extends AbstractSorter<T> {
      *                   двух элементов массива.
      */
     @Override
-    public void sort(T[] array, Comparator<T> comparator) {
+    public void sort(List<T> array, Comparator<T> comparator) {
         this.comparator = comparator;
         sort(array);
     }
@@ -62,12 +63,12 @@ public class QuickSort<T> extends AbstractSorter<T> {
      * @param left  - индекс левого конца части массива, передающегося для сортировки.
      * @param right - индекс правого конца части массива, передающегося для сортировки.
      */
-    private void sortingProcedure(T[] array, int left, int right) {
+    private void sortingProcedure(List<T> array, int left, int right) {
 
         while (left < right) {
             int random = CURRENT.nextInt(left, right + 1);
             if (random != left) {
-                swapElements(array, left, random);
+                swap(array, left, random);
             }
             int[] medians = partition(array, left, right);
             int leftMedian = medians[0];
@@ -92,47 +93,33 @@ public class QuickSort<T> extends AbstractSorter<T> {
      * @return - исходный массив, в котором элементы меньше ключевого располагаются слева
      * от ключевого, а элементы больше - справа от ключевого, соответственно.
      */
-    private int[] partition(T[] array, int left, int right) {
+    private int[] partition(List<T> array, int left, int right) {
         int[] boundary = new int[2];
 
         int cursor = left + 1;
         int cursorForEqualsElements = cursor;
         for (int i = left + 1; i <= right; i++) {
-            final int compare = comparator.compare(array[i], array[left]);
+            final int compare = comparator.compare(array.get(i), array.get(left));
             if (compare == 0) {
                 if (i != cursorForEqualsElements) {
-                    swapElements(array, cursor, i);
-                    swapElements(array, cursorForEqualsElements, cursor);
+                    swap(array, cursor, i);
+                    swap(array, cursorForEqualsElements, cursor);
                 }
                 cursorForEqualsElements++;
                 cursor++;
             }
             if (compare < 0) {
                 if (i != cursor) {
-                    swapElements(array, cursor, i);
+                    swap(array, cursor, i);
                 }
                 cursor++;
             }
         }
         boundary[1] = cursor;
         for (int i = left; i < cursorForEqualsElements; i++) {
-            swapElements(array, i, cursor - (i - left) - 1);
+            swap(array, i, cursor - (i - left) - 1);
         }
         boundary[0] = cursor - (cursorForEqualsElements - left) - 1;
         return boundary;
-    }
-
-    /**
-     * Меняет местами элемент исходного массива с индексом left с элементом, индекс
-     * которого right.
-     *
-     * @param array - исходный массив.
-     * @param left  - первый индекс.
-     * @param right - второй индекс.
-     */
-    private void swapElements(T[] array, int left, int right) {
-        T temp = array[left];
-        array[left] = array[right];
-        array[right] = temp;
     }
 }

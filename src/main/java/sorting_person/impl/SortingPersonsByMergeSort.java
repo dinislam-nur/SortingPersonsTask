@@ -4,14 +4,16 @@ import person.Person;
 import sorter.api.Sorter;
 import sorter.impl.merge_sort.MergeSort;
 import sortingPerson.api.IdenticalPersonsException;
+import sortingPerson.api.PersonSorter;
 
 import java.util.Comparator;
+import java.util.List;
 
 
 /**
  * Реализация сортировки массива объектов Person по алгоритму quicksort.
  */
-public class SortingPersonsByMergeSort extends SortingPerson {
+public class SortingPersonsByMergeSort implements PersonSorter {
 
     /**
      * Сортировка массива объектов Person по алгоритму сортировки слиянием. Алгоритм сортировки слиянием
@@ -25,7 +27,7 @@ public class SortingPersonsByMergeSort extends SortingPerson {
      * @param persons - исходный массив.
      * @throws IdenticalPersonsException - идентичные объекты Person по всем полям.
      */
-    public void sort(Person[] persons) throws IdenticalPersonsException {
+    public void sort(List<Person> persons) throws IdenticalPersonsException {
 
         Comparator<Person> comparator = getComparatorSexThenNameThenAgeComparing();
 
