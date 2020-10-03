@@ -1,6 +1,6 @@
 package sorter.impl.merge_sort;
 
-import sorter.api.Sorter;
+import sorter.impl.AbstractSorter;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -10,7 +10,7 @@ import java.util.Comparator;
  *
  * @param <T>
  */
-public class MergeSort<T> implements Sorter<T> {
+public class MergeSort<T> extends AbstractSorter<T> {
 
     /**
      * Компаратор для сравнения двух элементов массива. При инициализации присваивается
@@ -108,23 +108,5 @@ public class MergeSort<T> implements Sorter<T> {
                 array[i] = leftArray[leftCount++];
             }
         }
-    }
-
-    /**
-     * Компаратор по умолчанию, вызывающий метод compareTo на эллементе массива
-     * для сравнение с другим элементом.
-     *
-     * @return - компаратор по умолчанию.
-     * @throws ClassCastException - если элементы массива не предоставляют реализацию
-     *                            метода compareTo интерфеса Comparable<T>.
-     */
-    private Comparator<T> defaultComparator() throws ClassCastException {
-        return (o1, o2) -> {
-            if (o1 instanceof Comparable) {
-                return ((Comparable<T>) o1).compareTo(o2);
-            } else {
-                throw new ClassCastException("Class " + o1.getClass() + "should implements interface Comparable<T>");
-            }
-        };
     }
 }

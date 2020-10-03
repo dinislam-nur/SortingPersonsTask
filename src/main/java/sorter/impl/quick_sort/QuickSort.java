@@ -1,6 +1,7 @@
 package sorter.impl.quick_sort;
 
 import sorter.api.Sorter;
+import sorter.impl.AbstractSorter;
 
 import java.util.Comparator;
 import java.util.concurrent.ThreadLocalRandom;
@@ -10,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @param <T> - тип массива.
  */
-public class QuickSort<T> implements Sorter<T> {
+public class QuickSort<T> extends AbstractSorter<T> {
 
     /**
      * Компаратор для сравнения двух элементов массива. При инициализации присваивается
@@ -133,23 +134,5 @@ public class QuickSort<T> implements Sorter<T> {
         T temp = array[left];
         array[left] = array[right];
         array[right] = temp;
-    }
-
-    /**
-     * Компаратор по умолчанию, вызывающий метод compareTo на эллементе массива
-     * для сравнение с другим элементом.
-     *
-     * @return - компаратор по умолчанию.
-     * @throws ClassCastException - если элементы массива не предоставляют реализацию
-     *                            метода compareTo интерфеса Comparable<T>.
-     */
-    private Comparator<T> defaultComparator() throws ClassCastException {
-        return (o1, o2) -> {
-            if (o1 instanceof Comparable) {
-                return ((Comparable<T>) o1).compareTo(o2);
-            } else {
-                throw new ClassCastException("Class " + o1.getClass() + "should implements interface Comparable<T>");
-            }
-        };
     }
 }
